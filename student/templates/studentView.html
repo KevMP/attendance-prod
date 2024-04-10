@@ -1,0 +1,63 @@
+{% extends 'master.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+  Student View
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <!-- Welcome Header -->
+  <div class="text-center mb-4">
+    <h1 class="display-4">Welcome, {{ request.user.first_name }}!</h1>
+    <p>Semester Length: {{ week_number }} weeks</p>
+  </div>
+
+  <!-- Enrollment Information -->
+  {% if enrolled_classes %}
+    {% for class, class_data in enrolled_classes.items %}
+      <!-- Class Card -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h3 class="mb-0 text-muted">{{ class }}</h3>
+          <span class="badge rounded-pill bg-secondary text-white">Attendance Grade: {{ class_data.attendance_percentage|floatformat:2 }}%</span>
+        </div>
+        <!-- Attendance Table -->
+        <div class="card-body p-0">
+          <table class="table mb-0">
+            <thead>
+              <tr class="bg-secondary text-white">
+                <th scope="col">Week</th>
+                <th scope="col">Attendance</th>
+                <th scope="col">Recorded By</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for week_data in class_data.weeks_data %}
+                <tr {% if forloop.counter|divisibleby:2 %}class="bg-light"{% endif %}>
+                  <th scope="row">{{ week_data.week }} (Starts on: {{week_data.week|week_number_to_date}})</th>
+                  <td>
+                    {% if week_data.attended %}
+                      <i class="fa fa-check-circle text-success" aria-hidden="true"></i>
+                    {% else %}
+                      <i class="fa fa-times-circle text-danger" aria-hidden="true"></i>
+                    {% endif %}
+                    {{ week_data.attendance_type }}
+                  </td>
+                  <td>{{ week_data.recorded_by|default:'N/A' }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <!-- No Enrollment Alert -->
+    <div class="alert alert-secondary text-center" role="alert">
+      You are currently not enrolled in any classes.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+<!-- Workshop Upload Form -->
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card ">
+          <div class ="card-header bg-primary text-white navbar-deep-dark-blue">
+            <h3 class="card-title ">Workshop Upload</h3>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data" id="upload_form">
+              {% csrf_token %}
+              <div class="mb-3 d-flex align-items-center">
+                <div class="me-3">
+                  <label for="classChoice" class="form-label">Class</label>
+                  <select class="form-select" id="classChoice" name="class_choice">
+                    {% for value, text in upload_form.fields.class_choice.choices %}
+                    <option value="{{ value }}">{{ text }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                
+                <div class="ml-5">
+                  <input type="checkbox" id="ignoreTime" name="ignore_duration" class="form-check-input">
+                  <label for="ignoreTime" class="form-check-label">Ignore Duration</label>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="noParticipation" class="form-label">No Participation (comma seperated email)</label>
+                <input type="text" class="form-control" id="noParticipation" name="no_participation" maxlength="200" placeholder="some.email@mymdc.net, different.email@mymdc.com">
+              </div>
+              
+              <div class="mb-3">
+                <label for="chatText" class="form-label">Chat Text File</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="chatText" name="chat_text" aria-describedby="chatTextFileAddon" accept=".txt" onchange="updateFileName(this)">
+                  <label class="custom-file-label" for="chatText">Choose file</label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="reportCsv" class="form-label">Report CSV File</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="reportCsv" name="report_csv" aria-describedby="reportCsvFileAddon" accept=".csv" onchange="updateFileName(this)">
+                  <label class="custom-file-label" for="reportCsv">Choose file</label>
+                </div>
+              </div>         
+  
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload</button>
+              </div>
+            </form>
+            <!-- Add this below your form or wherever you want the progress bar to appear -->
+            <div id="progressWrapper" style="display:none;">
+              <label for="fileUploadProgress">Uploading:</label>
+              <progress id="fileUploadProgress" value="20" max="100"></progress>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function updateFileName(input) {
+      var fileName = input.files && input.files.length > 0 ? input.files[0].name : '';
+      // Next to the input, find the label and update its text
+      var label = input.nextElementSibling;
+      label.innerHTML = fileName;
+    }
+  
+    document.addEventListener("DOMContentLoaded", function() {
+      // Get the file inputs and the upload button
+      var chatTextFileInput = document.getElementById('chatText');
+      var reportCsvFileInput = document.getElementById('reportCsv');
+      var uploadButton = document.getElementById('uploadButton');
+    
+      // Initially disable the upload button
+      uploadButton.disabled = true;
+    
+      // Function to update the upload button state
+      function updateUploadButtonState() {
+        if(chatTextFileInput.files.length > 0 && reportCsvFileInput.files.length > 0){
+          uploadButton.textContent = 'Ready to Upload';
+          uploadButton.classList.add('btn-success');
+          uploadButton.classList.remove('btn-primary');
+          uploadButton.disabled = false; // Enable the button
+        } else {
+          uploadButton.textContent = 'Upload';
+          uploadButton.classList.add('btn-primary');
+          uploadButton.classList.remove('btn-success');
+          uploadButton.disabled = true; // Disable the button
+        }
+      }
+    
+      // Event listeners for file input changes
+      chatTextFileInput.addEventListener('change', updateUploadButtonState);
+      reportCsvFileInput.addEventListener('change', updateUploadButtonState);
+    });  
+  
+  
+    uploadButton.addEventListener('click', function() {
+      var progressWrapper = document.getElementById('progressWrapper');
+      var progressBar = document.getElementById('fileUploadProgress');
+      progressWrapper.style.display = 'block'; // Show the progress bar
+      progressBar.value = 0; // Reset progress bar value
+      
+      // Simulate progress. Replace this with real progress updates if you can hook into upload events.
+      var interval = setInterval(function() {
+        if(progressBar.value < 100) {
+          progressBar.value += 10; // Increment the progress bar
+        } else {
+          clearInterval(interval); // Stop the interval when progress is complete
+        }
+      }, 500); // Update progress every 500ms. Adjust timing as needed.
+      
+    });
+  
+  </script>

@@ -1,0 +1,228 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}
+  Workshop Hub
+{% endblock %}
+
+
+
+{% block hero %}
+<style>
+  .hero-background {
+    background-image: url('https://www.mdc.edu/img/news/Homepage-Cybersecyrity-NSA.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Use min-height instead of a fixed height to ensure content fits */
+    min-height: 50vh; 
+  }
+
+  /* Dark overlay style */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay with 50% opacity */
+    z-index: 1;
+  }
+
+  /* Flexbox for centering content */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 20px; /* Add some padding */
+  }
+
+  .hero-text {
+    max-width: 90%; /* Limit width of text to improve readability */
+    margin: auto; /* Center the text block */
+    padding-top: 10%;
+  }
+
+
+  .btn-entec-primary {
+    background-color: #ffcc00; /* Choose a color that contrasts well with the dark blue */
+    color: #003366; /* Text color that matches the navbar */
+    border: none; /* Remove the border for a cleaner look */
+  }
+
+  .btn-entec-primary, .btn-outline-light {
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+  }
+
+  
+
+  .btn-entec-primary:hover, .btn-outline-light:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .hero-background {
+      min-height: 60vh; /* Increase height on smaller screens */
+    }
+
+    .hero-content {
+      flex-direction: column; /* Stack elements vertically on small screens */
+    }
+  }
+
+
+</style>
+
+<div class="container-fluid p-0">
+  <div class="hero-background position-relative">
+    <div class="overlay"></div>
+    <div class="hero-content text-white">
+      <div class="hero-text">
+        <h1 class="display-4 font-weight-bold">Excel with ENTEC</h1>
+        <p class="lead mb-4">Your gateway to support with the Miami Dade College ENTEC Team.</p>
+        <div class="button-group">
+          <a href="#stuLogin" class="btn btn-entec-primary me-2">Get Started</a>
+          <a href="#learn-more" class="btn btn-outline-light">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+<style>
+  .card-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">Maximize Your Learning with Workshops</h2>
+  <div class="row">
+    <!-- Card 1 -->
+    <div class="col-md-4 mb-4 card-hover">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-clock mr-2" style="color: #17a2b8;"></i>Minimum Attendance</h5>
+          <p class="card-text">You must be present for at least 50 out of 60 minutes to be marked present.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="col-md-4 mb-4 card-hover">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-ban mr-2" style="color: #dc3545;"></i>Canceled Sessions</h5>
+          <p class="card-text">Attendance becomes optional/extra credit if sessions are canceled due to holidays or tutor availability.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="col-md-4 mb-4 card-hover">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-user-check mr-2" style="color: #28a745;"></i>Engagement Requirement</h5>
+          <p class="card-text">Paying attention is mandatory; failing to respond when called may result in revoked attendance.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="col-md-4 mb-4 card-hover">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-id-badge mr-2" style="color: #ffc107;"></i>Identification</h5>
+          <p class="card-text">Connect to sessions with your full name as listed on the class roster for identification.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="col-md-4 mb-4 card-hover" id="learn-more">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-envelope mr-2" style="color: #007bff;"></i>Email Verification</h5>
+          <p class="card-text">Always enter your student email in the chat to mark your attendance.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 6 -->
+    <div class="col-md-4 mb-4 card-hover">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title"><i class="fas fa-redo mr-2" style="color: #6f42c1;"></i>Missed Workshops</h5>
+          <p class="card-text">If you can't attend a workshop, schedule a weekly check-in with a tutor to stay on track.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container mb-5 p-5 bg-light">
+  <h2 class="text-center mb-4">Tailored Student Support Resources</h2>
+  <p class="text-center mb-4">In the ever-evolving field of computer science, independent learning is not just beneficial; it's essential. Embracing self-directed education empowers you to stay current with new technologies, sharpen your problem-solving skills, and deepen your understanding of complex concepts. Our resources are curated to support this journey, providing you with the tools to learn and grow at your own pace.</p>
+  
+  <div class="row">
+    <!-- Personalized Tutoring Card -->
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Personalized Tutoring</h5>
+          <p class="card-text">Individual guidance from our experienced tutors can provide you with a strong foundation for independent learning, enhancing your ability to tackle academic challenges confidently.</p>
+          <a href="https://libraryguides.mdc.edu/HialeahLR/tutoring#s-lg-box-27879468" target="_blank" class="btn btn-primary w-100">Schedule Your Session</a>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Digital Learning Library</h5>
+          <p class="card-text">Our Digital Learning Library is a gateway to a world of knowledge, providing on-demand access to resources that foster self-teaching and lifelong learning in computer science.</p>
+          <a href="https://www.geeksforgeeks.org" target="_blank" class="btn btn-outline-secondary mb-2">Geeks for Geeks</a>
+          <a href="https://cplusplus.com" target="_blank" class="btn btn-outline-secondary mb-2">C++</a>
+          <a href="https://www.w3schools.com" target="_blank" class="btn btn-outline-secondary mb-2">W3 Schools</a>
+          <a href="https://www.openai.com/" target="_blank" class="btn btn-outline-secondary mb-2">Chat GPT</a>
+          <!-- Add other resource links as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Access Your Attendance Record Section -->
+<section id="attendance-record" class="py-5 border-top">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h2 class="mb-4">Track Your Workshop Attendance</h2>
+        <p class="lead">Stay informed of your attendance and academic progress by accessing your personalized student dashboard.</p>
+        <div class="mt-3">
+          <p class="text-info">Log in with your student email and ID.</p>
+          <a href="/student" class="btn btn-lg btn-success animated-button" id="stuLogin">Go to Student Dashboard <i class="fas fa-chevron-right ml-2"></i></a>
+        </div>
+        <!-- Optionally add a background image -->
+        <!-- <div class="attendance-bg-image">Background Image here</div> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock %}

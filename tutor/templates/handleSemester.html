@@ -1,0 +1,123 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}
+  Handle Semester Data
+{% endblock %}
+
+{% block content %}
+<!-- Button trigger modal -->
+<div class="container-fluid pt-5">
+    <button type="button" class="btn btn-danger btn-lg btn-block rounded-pill shadow" data-toggle="modal" data-target="#clearSemesterModal">
+        Clear Semester Data
+</button>
+</div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="clearSemesterModal" tabindex="-1" role="dialog" aria-labelledby="clearSemesterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="clearSemesterModalLabel">Confirm Clear Semester Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Type <strong>CONFIRM CLEAR</strong> below to clear all semester data. This action cannot be undone. The database will be backed up.</p>
+          <input type="text" id="confirmInput" class="form-control" placeholder="Type confirmation text here">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmClearButton" disabled>Clear Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container mt-5">
+    <div class="card">
+      <h5 class="card-header bg-primary text-white">Semester Management</h5>
+      <div class="card-body">
+        <div class="alert alert-warning" role="alert">Double Check and Triple Check Before You Run This: This will try and create new student data, as well as student roles/profiles which will give login access to student views. Ensure the CSV file contains the following information: First Name, Last Name, ID, Email.</div>
+        <form method="post" enctype="multipart/form-data" class="pt-3">
+          {% csrf_token %}
+          <div class="custom-file mb-3">
+            <input type="file" class="custom-file-input" id="id_import_csv" name="import_csv" />
+            <label class="custom-file-label" for="id_import_csv">Choose CSV File</label>
+            {% if form.import_csv.errors %}
+              <div class="invalid-feedback">{{ form.import_csv.errors.as_text }}</div>
+            {% endif %}
+          </div>
+          <div class="form-group mb-3">
+            <label for="id_imported_class">Select a class</label>
+            <select name="imported_class" class="form-control" id="id_imported_class">
+              <option value="">Select a class</option>
+              {% for class in form.fields.imported_class.queryset %}
+                <option value="{{ class.pk }}">{{ class }}</option>
+              {% endfor %}
+            </select>
+            {% if form.imported_class.errors %}
+              <div class="invalid-feedback">{{ form.imported_class.errors.as_text }}</div>
+            {% endif %}
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Import Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Script to update the label of the custom file input with the file name
+    document.addEventListener('DOMContentLoaded', function () {
+      var fileInputs = document.querySelectorAll('.custom-file-input')
+    
+      fileInputs.forEach(function (input) {
+        input.addEventListener('change', function (event) {
+          var fileName = event.target.files[0].name
+          var nextSibling = event.target.nextElementSibling
+          nextSibling.innerText = fileName
+        })
+      })
+    })
+  </script>
+
+  <script>
+    // JavaScript to enable submit button when confirmation text matches
+    document.getElementById('confirmInput').addEventListener('input', function (e) {
+      const confirmButton = document.getElementById('confirmClearButton')
+      if (e.target.value === 'CONFIRM CLEAR') {
+        confirmButton.removeAttribute('disabled')
+      } else {
+        confirmButton.setAttribute('disabled', 'disabled')
+      }
+    })
+    
+    document.getElementById('confirmClearButton').addEventListener('click', function() {
+        var csrftoken = '{{ csrf_token }}';
+
+        fetch('/tutor/clearsemester', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': csrftoken,
+            },
+            body: 'confirmation_text=CONFIRM CLEAR'
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success){
+              alert('Semester data cleared successfully.');
+              window.location.href = '/tutor/semesterData'; // Redirect to the desired URL
+            } else {
+              alert('Failed to clear semester data: ' + data.error);
+            }
+          })
+          .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+          });
+    })
+      
+  </script>
+{% endblock %}
